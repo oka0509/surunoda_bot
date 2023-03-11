@@ -8,12 +8,13 @@ class WebhookController < ApplicationController
     events.each do |event|
       case event
       when Line::Bot::Event::Follow #友達追加時に友達idをデータベースに追加
+        @user = User.new(user_id: event["source"]["userId"])
+        @user.save
         message = {
           type: "text",
           text: "はじめましてなのだ！外出の回数を増やすのだ！"
         }
         client.reply_message(event['replyToken'], message)
-        puts event["source"]["userId"]
       when Line::Bot::Event::Postback #ボタンが押されたときに外出結果をデータベースに追加
         #todo
       when Line::Bot::Event::Message  
