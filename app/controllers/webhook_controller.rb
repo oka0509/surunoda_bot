@@ -1,4 +1,4 @@
-require 'dotenv'
+require "dotenv"
 Dotenv.load
 
 class WebhookController < ApplicationController
@@ -7,7 +7,7 @@ class WebhookController < ApplicationController
     events = client.parse_events_from(body)
     events.each do |event|
       case event
-      when Line::Bot::Event::Follow #友達追加時に友達idをデータベースに追加
+      when Line::Bot::Event::Follow #フォロー時にデータベースに追加
         @user = User.new(user_id: event["source"]["userId"])
         @user.save
         message = {
@@ -15,7 +15,9 @@ class WebhookController < ApplicationController
           text: "はじめましてなのだ！外出の回数を増やすのだ！"
         }
         client.reply_message(event['replyToken'], message)
-      when Line::Bot::Event::Postback #ボタンが押されたときに外出結果をデータベースに追加
+      when Line::Bot::Event::Unfollow #アンフォロー時にデータベースから削除
+        User.delete_by(user_id: event["source"]["userId"])
+      when Line::Bot::Event::Postback #ボタンが押された時に外出記録をデータベースに追加
         #todo
       when Line::Bot::Event::Message  
         case event.type
@@ -39,4 +41,3 @@ class WebhookController < ApplicationController
     def oshimai_degree(out_cnt, tot_cnt)
     end
 end
-

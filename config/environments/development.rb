@@ -1,7 +1,9 @@
 require "active_support/core_ext/integer/time"
+require "dotenv"
+Dotenv.load
 
 Rails.application.configure do
-  config.hosts << "1387-116-82-11-28.jp.ngrok.io"
+  config.hosts << ENV["FORWARDING"]
   config.cache_classes = false
 
   # Do not eager load code on boot.
