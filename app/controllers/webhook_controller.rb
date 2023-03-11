@@ -7,18 +7,19 @@ class WebhookController < ApplicationController
     events = client.parse_events_from(body)
     events.each do |event|
       case event
-      #友達追加時に友達idをデータベースに追加
-      when Line::Bot::Event::Follow
+      when Line::Bot::Event::Follow #友達追加時に友達idをデータベースに追加
+        message = {
+          type: "text",
+          text: "はじめましてなのだ！外出の回数を増やすのだ！"
+        }
+        client.reply_message(event['replyToken'], message)
         puts event["source"]["userId"]
-      #メッセ―ジが来たときに外出結果をデータベースに追加
-      when Line::Bot::Event::Message
+      when Line::Bot::Event::Postback #ボタンが押されたときに外出結果をデータベースに追加
+        #todo
+      when Line::Bot::Event::Message  
         case event.type
-        when Line::Bot::Event::MessageType::Text
-          message = {
-            type: "text",
-            text: event.message["text"]
-          }
-          client.reply_message(event['replyToken'], message)
+        when Line::Bot::Event::MessageType::Text #統計データを求められたとき
+          #todo
         end
       end
     end

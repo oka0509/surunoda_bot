@@ -7,24 +7,28 @@ client ||= Line::Bot::Client.new { |config|
   config.channel_token = ENV["CHANNEL_TOKEN"]
 }
 
-template = {
-  "type": "template",
-  "altText": "confirm template checking if went out",
-  "template": {
-    "type": "confirm",
-    "text": "今日外出したか答えるのだ！",
-    "actions": [
-      {
-        "type": "message",
-        "label": "はい",
-        "text": "はい"
-      },
-      {
-        "type": "message",
-        "label": "いいえ",
-        "text": "いいえ"
-      }
-    ]
+template =  {
+  "type": "template",    
+  "altText": "daily checkup",   
+  "template": {          
+      "type": "buttons",  
+      "text": "今日外出したか答えるのだ！",    
+      "actions": [      
+          # 1つ目のボタン
+          {
+            "type": "postback",
+            "displayText": "はい",
+            "label": "はい",
+            "data": "はい"
+          },
+          # 2つ目のボタン
+          {
+            "type": "postback",
+            "displayText": "いいえ",
+            "label": "いいえ",
+            "data": "いいえ"
+          }
+      ]
   }
 }
 
