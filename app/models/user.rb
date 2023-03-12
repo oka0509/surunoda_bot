@@ -1,3 +1,3 @@
 class User < ApplicationRecord
-  has_many :outs, dependent: :delete_all
+  has_many :outs, dependent: :destroy
 end

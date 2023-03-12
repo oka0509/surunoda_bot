@@ -8,6 +8,7 @@ client ||= Line::Bot::Client.new { |config|
 }
 
 #フォローしているユーザー一覧に対して、状況を通知する
+#todo
 
 #外出の程度
 def oshimai_degree(out_cnt, tot_cnt)
