@@ -5,7 +5,7 @@ ruby "3.1.3"
 
 gem "rails", "~> 7.0.4", ">= 7.0.4.2"
 
-gem 'dotenv'
+gem 'dotenv-rails'
 
 gem 'line-bot-api'
 
