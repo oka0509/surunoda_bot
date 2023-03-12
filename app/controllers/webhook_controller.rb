@@ -25,7 +25,15 @@ class WebhookController < ApplicationController
       when Line::Bot::Event::Message  
         case event.type
         when Line::Bot::Event::MessageType::Text #統計データを求められたとき
-          #todo
+          case event.message["text"]
+          when "data"
+            @user = User.find_by(user_id: event["source"]["userId"])
+            message = {
+              type: "text",
+              text: @user.send_stats
+            }
+            client.reply_message(event['replyToken'], message)
+          end
         end
       end
     end
@@ -38,9 +46,5 @@ class WebhookController < ApplicationController
         config.channel_secret = ENV["CHANNEL_SECRET"]
         config.channel_token = ENV["CHANNEL_TOKEN"]
       }
-    end
-
-    #外出の程度
-    def oshimai_degree(out_cnt, tot_cnt)
     end
 end

@@ -1,12 +1,16 @@
 class User < ApplicationRecord
   has_many :outs, dependent: :destroy
 
-  #バッチ処理(rails runnerで実行)
-  def User.send_checkup
-    @client ||= Line::Bot::Client.new { |config|
-      config.channel_secret = ENV["CHANNEL_SECRET"]
-      config.channel_token = ENV["CHANNEL_TOKEN"]
-    }
+  @client ||= Line::Bot::Client.new { |config|
+    config.channel_secret = ENV["CHANNEL_SECRET"]
+    config.channel_token = ENV["CHANNEL_TOKEN"]
+  }
+
+  def send_stats # 一人分の結果について文字列で返す
+    user_stats_message = "直近の結果なのだ！"
+  end
+
+  def self.send_checkup #バッチ処理(rails runnerで実行)
     template =  {
       "type": "template",    
       "altText": "daily checkup",   
@@ -34,8 +38,14 @@ class User < ApplicationRecord
     @client.broadcast(template)
   end
 
-  #バッチ処理2
-  def User.send_stats
-    #todo
+  def self.send_stats_all #バッチ処理2
+    users = User.all
+    users.each do |user|
+      message = {
+        type: "text",
+        text: user.send_stats
+      }
+      @client.push_message(user.user_id, message)
+    end
   end
 end
