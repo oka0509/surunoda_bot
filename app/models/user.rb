@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   has_many :outs, dependent: :destroy
 
-  #バッチ処理
+  #バッチ処理(rails runnerで実行)
   def User.send_checkup
     @client ||= Line::Bot::Client.new { |config|
       config.channel_secret = ENV["CHANNEL_SECRET"]
